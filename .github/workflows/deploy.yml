@@ -1,1 +1,39 @@
+name: Deploy Calculator Web App
+on:
+  push:
+    branches: [ main ] # Yommuu koodii 'main' irratti push gootu ofumaan hojjeta
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Flet
+        run: pip install flet
+
+      - name: Build Web App
+        run: flet publish main.py # Koodii kee gara Web-itti jijjiira
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'dist' # Faayila ijaarame 'dist' keessaa fuudha
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
