@@ -1,7 +1,7 @@
 name: Deploy Calculator Web App
 on:
   push:
-    branches: [ main ] # Yommuu koodii 'main' irratti push gootu ofumaan hojjeta
+    branches: [ main ]
 
 permissions:
   contents: read
@@ -24,7 +24,9 @@ jobs:
         run: pip install flet
 
       - name: Build Web App
-        run: flet publish main.py # Koodii kee gara Web-itti jijjiira
+        run: |
+          # --base-url /Calculator/ dabaluun 404 ni fura
+          flet publish main.py --base-url /Calculator/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -32,7 +34,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'dist' # Faayila ijaarame 'dist' keessaa fuudha
+          path: 'dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
